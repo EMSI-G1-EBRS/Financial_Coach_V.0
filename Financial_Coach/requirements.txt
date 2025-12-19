@@ -1,0 +1,11 @@
+requests
+pytest
+pytest-mock
+python-dotenv
+flask
+flask-cors
+langchain
+langchain-openai
+langgraph
+coverage
+pytest-cov

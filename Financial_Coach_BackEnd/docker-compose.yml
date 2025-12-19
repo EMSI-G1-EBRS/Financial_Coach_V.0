@@ -1,0 +1,36 @@
+services:
+  postgres-auth:
+    image: postgres:15-alpine
+    container_name: financial-coach-db-new
+    environment:
+      POSTGRES_USER: authuser
+      POSTGRES_PASSWORD: authpass123
+      POSTGRES_DB: authdb
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-new-data:/var/lib/postgresql/data
+    networks:
+      - finance-network
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: financial-coach-pgadmin-new
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@finance.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5051:80"
+    networks:
+      - finance-network
+    depends_on:
+      - postgres-auth
+
+networks:
+  finance-network:
+    driver: bridge
+
+volumes:
+  postgres-new-data:
+    driver: local

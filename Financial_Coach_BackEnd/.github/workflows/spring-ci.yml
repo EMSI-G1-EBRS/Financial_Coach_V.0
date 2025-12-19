@@ -1,0 +1,45 @@
+name: CI Spring Boot (Test & Coverage)
+
+# Déclencheurs
+on:
+  push:
+    branches: [ "main"]
+  pull_request:
+    branches: [ "main"]
+
+jobs:
+  build-and-test:
+    name: 🧪 Build, Test & Analyze
+    runs-on: ubuntu-latest
+
+    steps:
+      # Étape 1: Récupérer le code source
+      - name: ⬇️ Check out code
+        uses: actions/checkout@v4
+
+      # Étape 2: Configurer Java (JDK 17 est standard pour Spring Boot 3+)
+      - name: ☕ Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # Activer le cache pour les dépendances Maven
+          cache: 'maven'
+
+      # Étape 3: Exécuter les tests et la couverture
+      # La commande 'verify' exécute le cycle de vie complet, y compris :
+      # - 'test' (pour les tests unitaires)
+      # - 'integration-test' (pour les tests d'intégration via 'failsafe')
+      # - 'jacoco:report' (si configuré dans le pom.xml)
+      - name: 🏃 Build, Run Tests & Generate Coverage (Maven)
+        run: mvn -B clean verify
+
+      # Étape 4: Télécharger le rapport de couverture JaCoCo
+      # S'exécute même si l'étape 3 échoue (pour voir la couverture partielle)
+      - name: ⬆️ Upload JaCoCo Coverage Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          # 'target/site/jacoco' est le dossier de sortie HTML par défaut de JaCoCo
+          path: target/site/jacoco/
