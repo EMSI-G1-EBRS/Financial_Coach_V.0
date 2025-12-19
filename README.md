@@ -28,7 +28,7 @@ Communication : API REST via le package Dio et streaming des réponses de l'IA v
 
 ## Structure du Projet
 
-L'application est organisée de manière modulaire pour faciliter la maintenance:
+L'application est organisée de manière modulaire:
 
 lib/models/ : Modèles de données (utilisateurs, messages, etc.).
 
